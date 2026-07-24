@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monir | Backend Developer Portfolio</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="logo">Md Moniruzzaman <span>Full Stack Developer</span></div>
+    <ul class="nav-links">
+  <li><a href="#about-detail">About Me</a></li>
+  <li><a href="#resume">Resume</a></li>
+  <li><a href="#projects">Projects</a></li>
+  <li><a href="#experience">Experience</a></li>
+  <li><a href="#education">Education</a></li>
+  <li><a href="#testimonials">Testimonials</a></li>
+  <li><a href="#contact">Contact</a></li>
+  <li><a href="http://localhost:5173" target="_blank" class="admin-link">Admin</a></li>
+</ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="hero-left">
+      <h1>Hello</h1>
+      <div class="photo-wrapper">
+        <img src="assets/profile.png" alt="Monir">
+        <div class="social-icons">
+          <a href="#"><i>f</i></a>
+          <a href="#"><i>📷</i></a>
+          <a href="#"><i>X</i></a>
+          <a href="#"><i>in</i></a>
+        </div>
+      </div>
+      <div class="name-tag">
+        <h3>Md Moniruzzaman</h3>
+        <p>Full Stack Developer</p>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <p class="intro-text">
+        I'm a Computer Science student and backend/full-stack developer,
+        passionate about building scalable web applications using the
+        MERN stack. I love solving real-world problems through clean,
+        efficient code.
+      </p>
+      <div class="hero-buttons">
+        <a href="#resume" class="btn btn-primary">Resume</a>
+        <a href="#projects" class="btn btn-secondary">Projects</a>
+      </div>
+    </div>
+  </section>
+  <!-- About Section -->
+<section class="about-section" id="about-detail">
+  <div class="about-content">
+    <h2>About Me</h2>
+    <p class="about-text">
+      আমি একজন Computer Science শিক্ষার্থী এবং self-taught backend/full-stack developer।
+      কোডিং-এর প্রতি আমার আগ্রহ শুরু হয়েছিল সমস্যা সমাধানের ভালোবাসা থেকে — প্রতিটা bug একটা
+      ধাঁধা, আর সেটা সমাধান করার মুহূর্তটা আমার সবচেয়ে প্রিয়।
+    </p>
+    <p class="about-text">
+      আমি বিশ্বাস করি ভালো কোড শুধু কাজ করে না, সহজবোধ্যও হয়। MongoDB, Express, React, Node.js
+      নিয়ে কাজ করতে করতে আমি শিখেছি কীভাবে scalable, maintainable application বানাতে হয়। প্রতিটা
+      প্রজেক্টেই আমি চেষ্টা করি নতুন কিছু শিখতে — এই portfolio-টাও সম্পূর্ণ scratch থেকে, নিজের হাতে বানানো।
+    </p>
+    <p class="about-text">
+      কাজের বাইরে আমি নতুন টেকনোলজি explore করতে, open-source প্রজেক্ট দেখতে এবং backend architecture
+      নিয়ে পড়তে পছন্দ করি।
+    </p>
+
+    <div class="about-highlights">
+      <div class="highlight-item">
+        <span class="highlight-number">4+</span>
+        <span class="highlight-label">Projects Built</span>
+      </div>
+      <div class="highlight-item">
+        <span class="highlight-number">MERN</span>
+        <span class="highlight-label">Primary Stack</span>
+      </div>
+      <div class="highlight-item">
+        <span class="highlight-number">100%</span>
+        <span class="highlight-label">Self-Taught</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- Skills Section -->
+<section class="skills-section" id="skills">
+  <h2>My Skills</h2>
+  <div class="skills-container" id="skillsContainer">
+    <!-- এখানে JS দিয়ে dynamic ভাবে skill card বসবে -->
+  </div>
+</section>
+<!-- Projects Section -->
+<section class="projects-section" id="projects">
+  <h2>My Projects</h2>
+  <div class="projects-container" id="projectsContainer">
+    <!-- এখানে JS দিয়ে dynamic ভাবে project card বসবে -->
+  </div>
+</section>
+<!-- Experience Section -->
+<section class="experience-section" id="experience">
+  <h2>Experience</h2>
+  <div class="timeline" id="experienceContainer">
+  </div>
+</section>
+
+<!-- Education Section -->
+<section class="experience-section education-section" id="education">
+  <h2>Education</h2>
+  <div class="timeline" id="educationContainer">
+  </div>
+</section>
+<!-- Testimonials Section -->
+<section class="testimonials-section" id="testimonials">
+  <h2>What People Say</h2>
+  <div class="testimonials-container" id="testimonialsContainer">
+  </div>
+</section>
+<!-- Contact Section -->
+<section class="contact-section" id="contact">
+  <h2>Get In Touch</h2>
+  <p class="contact-subtitle">Have a project in mind or just want to say hi? Send a message below.</p>
+
+  <form id="contactForm" class="contact-form">
+    <input type="text" id="contactName" placeholder="Your Name" required>
+    <input type="email" id="contactEmail" placeholder="Your Email" required>
+    <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+    <button type="submit" class="btn btn-primary">Send Message</button>
+    <p id="contactStatus"></p>
+  </form>
+</section>
+  <script src="js/script.js"></script>
+</body>
+</html>
