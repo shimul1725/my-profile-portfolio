@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'https://my-profile-portfolio.onrender.com/api';
 
 async function loadSkills() {
   try {
@@ -208,3 +208,30 @@ async function loadTestimonials() {
   }
 }
 loadTestimonials();
+
+/* Active Navbar Link on Scroll (Scrollspy) */
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+
+function updateActiveNavLink() {
+  let currentSectionId = '';
+  const scrollPosition = window.scrollY + 150; // navbar height + কিছু buffer
+
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.offsetHeight;
+
+    if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+      currentSectionId = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === `#${currentSectionId}`) {
+      link.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', updateActiveNavLink);
