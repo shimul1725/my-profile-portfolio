@@ -579,3 +579,123 @@ body {
   margin-top: 2px;
 }
 
+/* ============================================================
+   MOBILE RESPONSIVE STYLES
+   ============================================================ */
+
+@media (max-width: 768px) {
+
+  /* ---------- Navbar ---------- */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 16px 20px;
+  }
+
+  .nav-links {
+    flex-wrap: wrap;
+    gap: 14px 18px;
+    margin-top: 12px;
+    width: 100%;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .logo span {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+    font-size: 12px;
+  }
+
+  /* ---------- Hero Section ---------- */
+  .hero {
+    grid-template-columns: 1fr;
+    margin-top: 130px; /* navbar এখন লম্বা হয়ে গেছে, তাই বাড়ানো হলো */
+  }
+
+  .hero-left {
+    padding: 30px 24px;
+  }
+
+  .hero-left h1 {
+    font-size: 56px;
+  }
+
+  .photo-wrapper {
+    width: 100%;
+    max-width: 320px;
+    height: 360px;
+  }
+
+  .hero-right {
+    padding: 40px 24px;
+  }
+
+  .intro-text {
+    font-size: 16px;
+    max-width: 100%;
+  }
+
+  /* ---------- Sections (general padding fix) ---------- */
+  .about-section,
+  .skills-section,
+  .projects-section,
+  .experience-section,
+  .testimonials-section,
+  .contact-section {
+    padding: 50px 24px;
+  }
+
+  .about-content h2,
+  .skills-section h2,
+  .projects-section h2,
+  .experience-section h2,
+  .testimonials-section h2,
+  .contact-section h2 {
+    font-size: 28px;
+  }
+
+  .about-highlights {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ---------- Experience Section — force 1 column on mobile ---------- */
+  #experience .timeline {
+    grid-template-columns: 1fr;
+  }
+
+  #education .timeline {
+    max-width: 100%;
+  }
+
+  /* ---------- Contact Form ---------- */
+  .contact-form {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-left h1 {
+    font-size: 42px;
+  }
+
+  .photo-wrapper {
+    height: 300px;
+  }
+
+  .nav-links {
+    gap: 10px 14px;
+  }
+
+  .nav-links a {
+    font-size: 12px;
+  }
+}
