@@ -88,18 +88,59 @@ body {
 }
 
 .hero-left {
-  background-color: var(--accent-purple);
+  background: linear-gradient(145deg, #b8a5f0 0%, #9d7ee8 45%, #483286 100%);
   position: relative;
   padding: 40px 60px;
   display: flex;
   flex-direction: column;
   color: var(--text-dark);
+  overflow: hidden;
+}
+
+/* Decorative blurred circle - top right */
+.hero-left::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.35), transparent 70%);
+  pointer-events: none;
+}
+
+/* Decorative dot grid pattern - bottom area */
+.hero-left::after {
+  content: '';
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  width: 140px;
+  height: 140px;
+  background-image: radial-gradient(rgba(26, 26, 26, 0.15) 2px, transparent 2px);
+  background-size: 18px 18px;
+  pointer-events: none;
 }
 
 .hero-left h1 {
   font-size: 100px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--text-dark);
+  letter-spacing: -3px;
+  position: relative;
+  z-index: 1;
+  line-height: 1;
+}
+
+.hero-left h1::after {
+  content: '';
+  display: block;
+  width: 90px;
+  height: 6px;
+  background-color: var(--accent-olive);
+  border-radius: 4px;
+  margin-top: 18px;
 }
 
 .hero-right {
@@ -157,7 +198,7 @@ body {
 
 .name-tag p {
   font-size: 14px;
-  color: #333;
+  color: #1a1a1a;
 }
 
 /*Hero Right Text + Buttons*/
