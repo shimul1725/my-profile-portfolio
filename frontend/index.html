@@ -3,162 +3,275 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Monir | Backend Developer Portfolio</title>
+  <title>Md Moniruzzaman | Full-Stack Developer & Data Analyst</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <a href="#" class="logo">Md Moniruzzaman <span>Full Stack Developer</span></a>
-    <ul class="nav-links">
-  <li><a href="#about-detail">About Me</a></li>
-  <li><a href="assets/resume" download>Resume</a></li>
-  <li><a href="#projects">Projects</a></li>
-  <li><a href="#experience">Experience</a></li>
-  <li><a href="#education">Education</a></li>
-  <li><a href="#testimonials">Testimonials</a></li>
-  <li><a href="#contact">Contact</a></li>
-  <li><a href="https://my-profile-portfolio-c2cw.vercel.app" target="_blank" class="admin-link">Admin</a></li>
-</ul>
-  </nav>
+  <!-- Navbar Header -->
+  <header class="navbar-header">
+    <nav class="navbar">
+      <a href="#" class="nav-brand">
+        <span class="brand-name">Md Moniruzzaman</span>
+      </a>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <div class="hero-left">
-      <h1>Hello</h1>
-      <div class="photo-wrapper">
-        <img src="assets/profile.png" alt="Monir">
-        <div class="social-icons">
-          <a href="https://github.com/shimul1725" target="_blank"><i>GH</i></a>
-          <a href="https://www.xing.com/profile/Md_Moniruzzaman22/web_profiles"><i>X</i></a>
-          <a href="https://www.linkedin.com/in/md-moniruzzaman1/"><i>in</i></a>
-          <a href="https://www.facebook.com"><i>f</i></a>
+      <ul class="nav-links">
+        <li><a href="#about-detail" class="nav-link active">About Me</a></li>
+        <li><a href="assets/resume.pdf" download class="nav-link">Resume</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#experience" class="nav-link">Experience</a></li>
+        <li><a href="#education" class="nav-link">Education</a></li>
+        <li><a href="#testimonials" class="nav-link">Testimonials</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+        <li><a href="https://my-profile-portfolio-c2cw.vercel.app" target="_blank" rel="noopener noreferrer" class="nav-link admin-link">Admin</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-left">
+        <div class="hero-photo-card">
+          <img src="assets/profile.png" alt="Md Moniruzzaman">
+          <span class="photo-caption">Dortmund, Germany 🇩🇪</span>
         </div>
       </div>
-      <div class="name-tag">
-          <h3>Md Moniruzzaman</h3>
-          <p>Full Stack Developer</p>
-          <div class="contact-info">
-             <p>📧 <a href="mailto:shimul.tu.dortmund@gmail.com">shimul.tu.dortmund@gmail.com</a></p>
-             <p>📱 <a href="https://wa.me/4915737963390" target="_blank">+49 15737963390</a></p>
+
+      <div class="hero-right">
+        <span class="hero-badge">Building reliable full-stack applications and predictive data models with clean, maintainable code</span>
+
+        <h1 class="hero-title">Full-Stack Developer | Data Analyst</h1>
+
+        <p class="hero-subtitle">Passionate about building scalable web apps and REST APIs using the MERN stack.</p>
+
+        <div class="tag-pills">
+          <span class="tag-pill">MongoDB • Express • React • Node.js</span>
+          <span class="tag-pill">JWT Auth • Cloudinary • REST APIs</span>
+          <span class="tag-pill">Python • Flask • Machine Learning</span>
+        </div>
+
+        <div class="contact-row">
+          <div class="email-box">
+            <div class="email-content">
+              <svg class="icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="20" height="16" x="2" y="4" rx="2"/>
+                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+              </svg>
+              <span>shimul.tu.dortmund@gmail.com</span>
+            </div>
+            <button id="copyEmailBtn" class="copy-btn" title="Copy Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+              </svg>
+            </button>
           </div>
-       </div>
-    </div>
 
-    <div class="hero-right">
-      <p class="intro-text">
-       Full-Stack Developer specializing in MERN stack development and machine learning integration. 
-       I focus equally on building robust, scalable backend systems and intuitive, high-performance frontend interfaces to deliver complete, real-world web applications.
-      </p>
-      <div class="hero-buttons">
-        <a href="assets/resume" download class="btn btn-primary">Download Resume</a>
-        <a href="#projects" class="btn btn-secondary">Projects</a>
+          <a href="https://www.linkedin.com/in/md-moniruzzaman1/" target="_blank" rel="noopener noreferrer" class="icon-box linkedin" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+            </svg>
+          </a>
+
+          <a href="https://github.com/shimul1725" target="_blank" rel="noopener noreferrer" class="icon-box github" title="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+            </svg>
+          </a>
+
+          <a href="YOUR_XING_PROFILE_URL" target="_blank" rel="noopener noreferrer" class="icon-box xing" title="Xing">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M18.188 0c-.517 0-.741.325-.927.665 0 0-4.582 8.125-4.683 8.303-.082.146-.106.257 0 .445l5.856 10.422c.186.33.432.665.952.665h3.812c.315 0 .528-.182.383-.482l-5.748-10.229 4.603-8.156c.145-.3-.068-.633-.383-.633h-3.865zm-11.75 4.88c-.516 0-.718.33-.902.656l-3.23 5.702c-.145.298.068.632.383.632h3.865c.517 0 .741-.326.927-.665l3.23-5.702c.145-.3-.068-.623-.383-.623h-3.89z"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="resume-buttons">
+          <a href="assets/resume.pdf" download class="btn btn-primary">Download Resume</a>
+          <a href="#projects" class="btn btn-secondary">Projects</a>
+        </div>
+
+        <p class="availability-text">Open to opportunities • Germany / EU</p>
       </div>
-    </div>
-  </section>
-<!-- About Section -->
-<section class="about-section" id="about-detail">
-  <h2>About Me</h2>
+    </section>
 
-  <div class="about-grid">
-    <div class="about-text-col">
-      <p class="about-text">
-        Aspiring Backend & Full-Stack Developer with a strong foundation in the MERN stack (MongoDB,
-        Express.js, React, Node.js). I love building projects from scratch — not just to make something work, but to
-        truly understand how and why it works.
-      </p>
-      <p class="about-text">
-        From designing REST APIs and handling authentication to building real-time features with Socket.IO and
-        managing cloud deployment, I enjoy every layer of the development process. Currently, I'm focused on
-        sharpening my backend engineering skills through hands-on projects, with practical experience deploying
-        full-stack applications using Render, Vercel, and MongoDB Atlas.
-      </p>
-      <p class="about-text">
-        I'm actively looking for opportunities to apply my skills as a Backend / Full-Stack Developer and grow as
-        part of a development team.
-      </p>
-    </div>
+    <!-- About Section -->
+    <section class="about-section" id="about-detail">
+      <div class="section-container">
+        <h2>About Me</h2>
 
-    <div class="about-facts-col">
-      <div class="fact-card">
-        <span class="fact-icon">🚀</span>
-        <div>
-          <span class="fact-number">4+</span>
-          <span class="fact-label">Projects Built</span>
+        <div class="about-grid">
+          <div class="about-text-col">
+            <p class="about-text">
+              Experienced Backend & Full-Stack Developer with a strong foundation in the MERN stack (MongoDB,
+              Express.js, React, Node.js). I love building projects from scratch — not just to make something work, but to
+              truly understand how and why it works.
+            </p>
+            <p class="about-text">
+              From designing REST APIs and handling authentication to building real-time features with Socket.IO and
+              managing cloud deployment, I enjoy every layer of the development process. Currently, I'm focused on
+              sharpening my backend engineering skills through hands-on projects, with practical experience deploying
+              full-stack applications using Render, Vercel, and MongoDB Atlas.
+            </p>
+            <p class="about-text">
+              I'm actively looking for opportunities to apply my skills as a Backend / Full-Stack Developer or Data Analyst and grow as
+              part of a development team.
+            </p>
+          </div>
+
+          <div class="about-facts-col">
+            <div class="fact-card">
+              <span class="fact-icon">🚀</span>
+              <div>
+                <span class="fact-number">4+</span>
+                <span class="fact-label">Projects Built</span>
+              </div>
+            </div>
+            <div class="fact-card">
+              <span class="fact-icon">⚡</span>
+              <div>
+                <span class="fact-number">MERN</span>
+                <span class="fact-label">Primary Stack</span>
+              </div>
+            </div>
+            <div class="fact-card">
+              <span class="fact-icon">🎯</span>
+              <div>
+                <span class="fact-number">100%</span>
+                <span class="fact-label">Self-Taught</span>
+              </div>
+            </div>
+            <div class="fact-card">
+              <span class="fact-icon">☁️</span>
+              <div>
+                <span class="fact-number">3</span>
+                <span class="fact-label">Deployment Platforms</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="fact-card">
-        <span class="fact-icon">⚡</span>
-        <div>
-          <span class="fact-number">MERN</span>
-          <span class="fact-label">Primary Stack</span>
+    </section>
+
+    <!-- Skills Section (3D Cube) -->
+    <section class="skills-section" id="skills">
+      <h2>Tech Stack</h2>
+      <p class="skills-subtitle">Explore my stack as a 3D cube. Drag to rotate, or use the buttons to jump to a side.</p>
+
+      <div class="cube-tabs" id="cubeTabs">
+        <button data-face="front" class="cube-tab active">Backend</button>
+        <button data-face="right" class="cube-tab">Frontend</button>
+        <button data-face="back" class="cube-tab">Database</button>
+        <button data-face="left" class="cube-tab">Tools</button>
+        <button data-face="top" class="cube-tab">Other</button>
+        <button id="cubeReset" class="cube-tab cube-action">Reset</button>
+        <button id="cubeAutoRotate" class="cube-tab cube-action">Auto Rotate</button>
+      </div>
+
+      <div class="cube-scene">
+        <div class="cube" id="skillsCube">
+          <div class="cube-face face-front">
+            <div class="face-header">
+              <h3>Backend</h3>
+              <span class="face-badge">APIs • Auth • Server</span>
+            </div>
+            <div class="cube-pills" id="face-Backend"></div>
+          </div>
+          <div class="cube-face face-right">
+            <div class="face-header">
+              <h3>Frontend</h3>
+              <span class="face-badge">UI • React • CSS</span>
+            </div>
+            <div class="cube-pills" id="face-Frontend"></div>
+          </div>
+          <div class="cube-face face-back">
+            <div class="face-header">
+              <h3>Database</h3>
+              <span class="face-badge">Storage • Queries • Schemas</span>
+            </div>
+            <div class="cube-pills" id="face-Database"></div>
+          </div>
+          <div class="cube-face face-left">
+            <div class="face-header">
+              <h3>Tools</h3>
+              <span class="face-badge">Deploy • Git • Cloud</span>
+            </div>
+            <div class="cube-pills" id="face-Tools"></div>
+          </div>
+          <div class="cube-face face-top">
+            <div class="face-header">
+              <h3>Other</h3>
+              <span class="face-badge">Data • Analysis</span>
+            </div>
+            <div class="cube-pills" id="face-Other"></div>
+          </div>
+          <div class="cube-face face-bottom">
+            <div class="face-header">
+              <h3>All Skills</h3>
+              <span class="face-badge">Full Overview</span>
+            </div>
+            <div class="cube-pills" id="face-bottom-summary"></div>
+          </div>
         </div>
       </div>
-      <div class="fact-card">
-        <span class="fact-icon">🎯</span>
-        <div>
-          <span class="fact-number">100%</span>
-          <span class="fact-label">Self-Taught</span>
+
+      <p class="cube-hint">Drag the cube to rotate • Click tabs to view each side</p>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects-section" id="projects">
+      <div class="section-container">
+        <h2>My Projects</h2>
+        <div class="projects-container" id="projectsContainer">
         </div>
       </div>
-      <div class="fact-card">
-        <span class="fact-icon">☁️</span>
-        <div>
-          <span class="fact-number">3</span>
-          <span class="fact-label">Deployment Platforms</span>
+    </section>
+
+    <!-- Experience Section -->
+    <section class="experience-section" id="experience">
+      <div class="section-container">
+        <h2>Experience</h2>
+        <div class="timeline" id="experienceContainer">
         </div>
       </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-  <!-- Skills Section -->
-<section class="skills-section" id="skills">
-  <h2>My Skills</h2>
-  <div class="skills-container" id="skillsContainer">
-    <!-- এখানে JS দিয়ে dynamic ভাবে skill card বসবে -->
-  </div>
-</section>
-<!-- Projects Section -->
-<section class="projects-section" id="projects">
-  <h2>My Projects</h2>
-  <div class="projects-container" id="projectsContainer">
-    <!-- এখানে JS দিয়ে dynamic ভাবে project card বসবে -->
-  </div>
-</section>
-<!-- Experience Section -->
-<section class="experience-section" id="experience">
-  <h2>Experience</h2>
-  <div class="timeline" id="experienceContainer">
-  </div>
-</section>
+    <!-- Education Section -->
+    <section class="experience-section education-section" id="education">
+      <div class="section-container">
+        <h2>Education</h2>
+        <div class="timeline" id="educationContainer">
+        </div>
+      </div>
+    </section>
 
-<!-- Education Section -->
-<section class="experience-section education-section" id="education">
-  <h2>Education</h2>
-  <div class="timeline" id="educationContainer">
-  </div>
-</section>
-<!-- Testimonials Section -->
-<section class="testimonials-section" id="testimonials">
-  <h2>What People Say</h2>
-  <div class="testimonials-container" id="testimonialsContainer">
-  </div>
-</section>
-<!-- Contact Section -->
-<section class="contact-section" id="contact">
-  <h2>Get In Touch</h2>
-  <p class="contact-subtitle">Have a project in mind or just want to say hi? Send a message below.</p>
+    <!-- Testimonials Section -->
+    <section class="testimonials-section" id="testimonials">
+      <div class="section-container">
+        <h2>What People Say</h2>
+        <div class="testimonials-container" id="testimonialsContainer">
+        </div>
+      </div>
+    </section>
 
-  <form id="contactForm" class="contact-form">
-    <input type="text" id="contactName" placeholder="Your Name" required>
-    <input type="email" id="contactEmail" placeholder="Your Email" required>
-    <textarea id="contactMessage" placeholder="Your Message" required></textarea>
-    <button type="submit" class="btn btn-primary">Send Message</button>
-    <p id="contactStatus"></p>
-  </form>
-</section>
+    <!-- Contact Section -->
+    <section class="contact-section" id="contact">
+      <div class="section-container">
+        <h2>Get In Touch</h2>
+        <p class="contact-subtitle">Have a project in mind or just want to say hi? Send a message below.</p>
+
+        <form id="contactForm" class="contact-form">
+          <input type="text" id="contactName" placeholder="Your Name" required>
+          <input type="email" id="contactEmail" placeholder="Your Email" required>
+          <textarea id="contactMessage" placeholder="Your Message" required></textarea>
+          <button type="submit" class="btn btn-primary">Send Message</button>
+          <p id="contactStatus"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
   <script src="js/script.js"></script>
 </body>
 </html>

@@ -1,37 +1,152 @@
 const API_BASE_URL = 'https://my-profile-portfolio.onrender.com/api';
 //const API_BASE_URL = 'http://localhost:5000/api';
 
+/* ============================================================
+   SKILLS 3D CUBE
+   ============================================================ */
 async function loadSkills() {
   try {
     const response = await fetch(`${API_BASE_URL}/skills`);
     const skills = await response.json();
 
-    const container = document.getElementById('skillsContainer');
-    container.innerHTML = ''; // আগে কিছু থাকলে খালি করো
+    const categories = ['Backend', 'Frontend', 'Database', 'Tools', 'Other'];
 
-    if (skills.length === 0) {
-      container.innerHTML = '<p>No skills added yet.</p>';
-      return;
-    }
-
-    skills.forEach(skill => {
-      const skillCard = document.createElement('div');
-      skillCard.classList.add('skill-card');
-      skillCard.innerHTML = `
-        <h4>${skill.name}</h4>
-        <span class="skill-category">${skill.category}</span>
-        <div class="progress-bar">
-          <div class="progress-fill" style="width: ${skill.proficiency}%"></div>
-        </div>
-      `;
-      container.appendChild(skillCard);
+    categories.forEach(cat => {
+      const container = document.getElementById(`face-${cat}`);
+      const items = skills.filter(s => s.category === cat);
+      container.innerHTML = items.length
+        ? items.map(s => `<span>${s.name}</span>`).join('')
+        : '<span>No skills yet</span>';
     });
+
+    const bottomContainer = document.getElementById('face-bottom-summary');
+    bottomContainer.innerHTML = skills.map(s => `<span>${s.name}</span>`).join('');
+
   } catch (error) {
     console.error('Error loading skills:', error);
   }
 }
 
-/*Porject*/
+/* Cube rotation state — সবসময় একটা হালকা isometric tilt রাখা হয় */
+const cube = document.getElementById('skillsCube');
+const BASE_TILT = { x: -12, y: -25 };
+let rotX = BASE_TILT.x;
+let rotY = BASE_TILT.y;
+let autoRotateInterval = null;
+
+function applyCubeRotation() {
+  cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+}
+
+const faceRotations = {
+  front:  { x: BASE_TILT.x + 0,   y: BASE_TILT.y + 0 },
+  right:  { x: BASE_TILT.x + 0,   y: BASE_TILT.y - 90 },
+  back:   { x: BASE_TILT.x + 0,   y: BASE_TILT.y + 180 },
+  left:   { x: BASE_TILT.x + 0,   y: BASE_TILT.y + 90 },
+  top:    { x: BASE_TILT.x - 90,  y: BASE_TILT.y + 0 },
+  bottom: { x: BASE_TILT.x + 90,  y: BASE_TILT.y + 0 }
+};
+
+/* Tab click → rotate to that face */
+const cubeTabs = document.querySelectorAll('.cube-tab[data-face]');
+cubeTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    stopAutoRotate();
+    autoRotateBtn.textContent = 'Auto Rotate';
+    const face = tab.getAttribute('data-face');
+    rotX = faceRotations[face].x;
+    rotY = faceRotations[face].y;
+    applyCubeRotation();
+
+    cubeTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+/* Reset button */
+document.getElementById('cubeReset').addEventListener('click', () => {
+  stopAutoRotate();
+  autoRotateBtn.textContent = 'Auto Rotate';
+  rotX = BASE_TILT.x;
+  rotY = BASE_TILT.y;
+  applyCubeRotation();
+  cubeTabs.forEach(t => t.classList.remove('active'));
+  cubeTabs[0].classList.add('active');
+});
+
+/* Auto rotate toggle (with button text change) */
+function startAutoRotate() {
+  autoRotateInterval = setInterval(() => {
+    rotY += 1;
+    applyCubeRotation();
+  }, 30);
+}
+
+function stopAutoRotate() {
+  if (autoRotateInterval) {
+    clearInterval(autoRotateInterval);
+    autoRotateInterval = null;
+  }
+}
+
+const autoRotateBtn = document.getElementById('cubeAutoRotate');
+autoRotateBtn.addEventListener('click', () => {
+  if (autoRotateInterval) {
+    stopAutoRotate();
+    autoRotateBtn.textContent = 'Auto Rotate';
+  } else {
+    startAutoRotate();
+    autoRotateBtn.textContent = 'Pause Rotation';
+  }
+});
+
+/* Drag to rotate */
+let isDragging = false;
+let startX = 0;
+let startY = 0;
+let startRotX = 0;
+let startRotY = 0;
+
+function dragStart(clientX, clientY) {
+  stopAutoRotate();
+  autoRotateBtn.textContent = 'Auto Rotate';
+  isDragging = true;
+  startX = clientX;
+  startY = clientY;
+  startRotX = rotX;
+  startRotY = rotY;
+  cube.classList.add('dragging');
+}
+
+function dragMove(clientX, clientY) {
+  if (!isDragging) return;
+  const deltaX = clientX - startX;
+  const deltaY = clientY - startY;
+  rotY = startRotY + deltaX * 0.4;
+  rotX = startRotX - deltaY * 0.4;
+  applyCubeRotation();
+}
+
+function dragEnd() {
+  isDragging = false;
+  cube.classList.remove('dragging');
+}
+
+cube.addEventListener('mousedown', (e) => dragStart(e.clientX, e.clientY));
+window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
+window.addEventListener('mouseup', dragEnd);
+
+cube.addEventListener('touchstart', (e) => {
+  const touch = e.touches[0];
+  dragStart(touch.clientX, touch.clientY);
+});
+window.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  dragMove(touch.clientX, touch.clientY);
+});
+window.addEventListener('touchend', dragEnd);
+
+/*Project*/
 async function loadProjects() {
   try {
     const response = await fetch(`${API_BASE_URL}/projects`);
@@ -72,7 +187,7 @@ async function loadProjects() {
   }
 }
 
-/*Experience  */
+/*Experience*/
 async function loadExperience() {
   try {
     const response = await fetch(`${API_BASE_URL}/experience`);
@@ -108,19 +223,12 @@ async function loadExperience() {
   }
 }
 
-// ==============================================
-// পরিবর্তন এখানে: createTimelineItem ফাংশন
-// আগে description একটা প্লেইন প্যারাগ্রাফ (<p>) হিসেবে দেখাতো।
-// এখন description একটা Array (['point1', 'point2', ...]),
-// তাই আমরা প্রতিটা point কে আলাদা <li> বানিয়ে <ul> এর ভেতর বসাবো।
-// ==============================================
 function createTimelineItem(exp) {
   const startYear = new Date(exp.startDate).getFullYear();
   const endYear = exp.currentlyActive
     ? 'Present'
     : (exp.endDate ? new Date(exp.endDate).getFullYear() : '');
 
-  // description array হলে bullet list বানাও, না থাকলে খালি রাখো
   let descriptionHTML = '';
   if (Array.isArray(exp.description) && exp.description.length > 0) {
     const bulletPoints = exp.description.map(point => `<li>${point}</li>`).join('');
@@ -138,21 +246,25 @@ function createTimelineItem(exp) {
   return item;
 }
 
+/* Initial load */
 loadSkills();
 loadProjects();
 loadExperience();
+applyCubeRotation();
 
-/*Scroll Listener for transparent */
+/*Scroll Listener for transparent navbar (kept for future use if needed)*/
 window.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar');
-  if (window.scrollY > 50) {
-    navbar.classList.add('scrolled');
-  } else {
-    navbar.classList.remove('scrolled');
+  const navbar = document.querySelector('.navbar-header');
+  if (navbar) {
+    if (window.scrollY > 50) {
+      navbar.classList.add('scrolled');
+    } else {
+      navbar.classList.remove('scrolled');
+    }
   }
 });
 
-/*contactForm */
+/*contactForm*/
 const contactForm = document.getElementById('contactForm');
 
 if (contactForm) {
@@ -192,8 +304,7 @@ if (contactForm) {
   });
 }
 
-/*testimonials */
-
+/*testimonials*/
 async function loadTestimonials() {
   try {
     const response = await fetch(`${API_BASE_URL}/testimonials`);
@@ -231,7 +342,7 @@ const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
 function updateActiveNavLink() {
   let currentSectionId = '';
-  const scrollPosition = window.scrollY + 150; // navbar height + কিছু buffer
+  const scrollPosition = window.scrollY + 150;
 
   sections.forEach(section => {
     const sectionTop = section.offsetTop;
@@ -251,3 +362,19 @@ function updateActiveNavLink() {
 }
 
 window.addEventListener('scroll', updateActiveNavLink);
+
+/* Copy Email Button */
+const copyEmailBtn = document.getElementById('copyEmailBtn');
+if (copyEmailBtn) {
+  copyEmailBtn.addEventListener('click', () => {
+    navigator.clipboard.writeText('shimul.tu.dortmund@gmail.com');
+    copyEmailBtn.textContent = '✅';
+    setTimeout(() => {
+      copyEmailBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+          <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+        </svg>`;
+    }, 1500);
+  });
+}
