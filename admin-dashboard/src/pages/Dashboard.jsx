@@ -240,9 +240,23 @@ function Dashboard() {
     setExpDesc('');
   };
 
+  // ==============================================
+  // পরিবর্তন এখানে: handleExpSubmit ফাংশন
+  // আগে description: expDesc সরাসরি string হিসেবে পাঠানো হতো।
+  // Mongoose-এর [String] schema type-এ plain string পাঠালে সেটা
+  // split না করেই এক-element-এর array বানিয়ে ফেলে (bug এর কারণ এখানেই ছিল)।
+  // তাই এখন frontend থেকেই textarea-র text-কে লাইন ধরে ধরে
+  // split করে, খালি লাইন বাদ দিয়ে, আসল array বানিয়ে পাঠাচ্ছি।
+  // ==============================================
   const handleExpSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // textarea-র raw multi-line text-কে bullet point array-তে ভাঙা
+    const descriptionArray = expDesc
+      .split('\n')                       // প্রতিটা নতুন লাইনে ভাগ করা
+      .map(line => line.trim())          // আগে-পিছে স্পেস থাকলে সরানো
+      .filter(line => line.length > 0);  // খালি লাইন বাদ দেওয়া
 
     const expData = {
       type: expType,
@@ -251,7 +265,7 @@ function Dashboard() {
       startDate: expStartDate,
       endDate: expCurrentlyActive ? null : expEndDate, // "Currently active" টিক দেওয়া থাকলে endDate পাঠানো হবে না
       currentlyActive: expCurrentlyActive,
-      description: expDesc
+      description: descriptionArray // এখন সবসময় array পাঠাচ্ছি, string না
     };
 
     try {
@@ -268,6 +282,13 @@ function Dashboard() {
     }
   };
 
+  // ==============================================
+  // পরিবর্তন এখানে: handleEditExp ফাংশন
+  // exp.description এখন array হতে পারে (নতুন entry) অথবা
+  // পুরনো entry হলে string ও হতে পারে। textarea-তে দেখানোর জন্য
+  // দুই ক্ষেত্রেই এটাকে আবার multi-line string বানিয়ে ফেরত দিচ্ছি,
+  // যাতে edit করার সময় প্রতিটা point আলাদা লাইনে দেখা যায়।
+  // ==============================================
   const handleEditExp = (exp) => {
     setEditingExpId(exp._id);
     setExpType(exp.type);
@@ -277,7 +298,13 @@ function Dashboard() {
     setExpStartDate(exp.startDate?.slice(0, 10) || '');
     setExpEndDate(exp.endDate?.slice(0, 10) || '');
     setExpCurrentlyActive(exp.currentlyActive);
-    setExpDesc(exp.description || '');
+
+    // description array হলে প্রতিটা item নতুন লাইনে জোড়া দিয়ে string বানানো (textarea-তে দেখানোর জন্য)
+    if (Array.isArray(exp.description)) {
+      setExpDesc(exp.description.join('\n'));
+    } else {
+      setExpDesc(exp.description || '');
+    }
   };
 
   const handleDeleteExp = async (id) => {
@@ -585,7 +612,7 @@ function Dashboard() {
           </label>
 
           <textarea
-            placeholder="Description (optional)"
+            placeholder="Description (optional) — প্রতি লাইনে একটা point লিখো"
             value={expDesc}
             onChange={(e) => setExpDesc(e.target.value)}
           />

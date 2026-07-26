@@ -26,8 +26,9 @@ const experienceSchema = new mongoose.Schema({
     default: false      // "Present" দেখানোর জন্য
   },
   description: {
-    type: String
-  }
+  type: [String],   // এখন bullet point-এর array হিসেবে save হবে
+  default: []
+}
 }, { timestamps: true });
 
 module.exports = mongoose.model('Experience', experienceSchema);

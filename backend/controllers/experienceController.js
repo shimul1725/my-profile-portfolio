@@ -11,7 +11,16 @@ const getAllExperiences = async (req, res) => {
 
 const createExperience = async (req, res) => {
   try {
-    const newExperience = new Experience(req.body);
+    const experienceData = { ...req.body };
+
+    if (typeof experienceData.description === 'string') {
+      experienceData.description = experienceData.description
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+    }
+
+    const newExperience = new Experience(experienceData);
     const savedExperience = await newExperience.save();
     res.status(201).json(savedExperience);
   } catch (error) {
@@ -21,9 +30,18 @@ const createExperience = async (req, res) => {
 
 const updateExperience = async (req, res) => {
   try {
+    const experienceData = { ...req.body };
+
+    if (typeof experienceData.description === 'string') {
+      experienceData.description = experienceData.description
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line.length > 0);
+    }
+
     const updatedExperience = await Experience.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      experienceData,
       { new: true }
     );
     if (!updatedExperience) {

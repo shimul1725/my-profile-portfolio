@@ -1,4 +1,5 @@
-const API_BASE_URL = 'https://my-profile-portfolio.onrender.com/api';
+// const API_BASE_URL = 'https://my-profile-portfolio.onrender.com/api';
+const API_BASE_URL = 'http://localhost:5000/api';
 
 async function loadSkills() {
   try {
@@ -29,6 +30,7 @@ async function loadSkills() {
     console.error('Error loading skills:', error);
   }
 }
+
 /*Porject*/
 async function loadProjects() {
   try {
@@ -69,6 +71,7 @@ async function loadProjects() {
     console.error('Error loading projects:', error);
   }
 }
+
 /*Experience  */
 async function loadExperience() {
   try {
@@ -105,11 +108,24 @@ async function loadExperience() {
   }
 }
 
+// ==============================================
+// পরিবর্তন এখানে: createTimelineItem ফাংশন
+// আগে description একটা প্লেইন প্যারাগ্রাফ (<p>) হিসেবে দেখাতো।
+// এখন description একটা Array (['point1', 'point2', ...]),
+// তাই আমরা প্রতিটা point কে আলাদা <li> বানিয়ে <ul> এর ভেতর বসাবো।
+// ==============================================
 function createTimelineItem(exp) {
   const startYear = new Date(exp.startDate).getFullYear();
   const endYear = exp.currentlyActive
     ? 'Present'
     : (exp.endDate ? new Date(exp.endDate).getFullYear() : '');
+
+  // description array হলে bullet list বানাও, না থাকলে খালি রাখো
+  let descriptionHTML = '';
+  if (Array.isArray(exp.description) && exp.description.length > 0) {
+    const bulletPoints = exp.description.map(point => `<li>${point}</li>`).join('');
+    descriptionHTML = `<ul class="timeline-desc-list">${bulletPoints}</ul>`;
+  }
 
   const item = document.createElement('div');
   item.classList.add('timeline-item');
@@ -117,7 +133,7 @@ function createTimelineItem(exp) {
     <h3>${exp.title}</h3>
     <h4>${exp.organization}</h4>
     <p class="timeline-date">${startYear} - ${endYear}</p>
-    <p class="timeline-desc">${exp.description || ''}</p>
+    ${descriptionHTML}
   `;
   return item;
 }
