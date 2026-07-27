@@ -193,22 +193,11 @@ async function loadExperience() {
     const response = await fetch(`${API_BASE_URL}/experience`);
     const experiences = await response.json();
 
-    const experienceContainer = document.getElementById('experienceContainer');
     const educationContainer = document.getElementById('educationContainer');
-
-    experienceContainer.innerHTML = '';
     educationContainer.innerHTML = '';
 
     const experienceItems = experiences.filter(exp => exp.type === 'Experience');
     const educationItems = experiences.filter(exp => exp.type === 'Education');
-
-    if (experienceItems.length === 0) {
-      experienceContainer.innerHTML = '<p>No experience added yet.</p>';
-    } else {
-      experienceItems.forEach(exp => {
-        experienceContainer.appendChild(createTimelineItem(exp));
-      });
-    }
 
     if (educationItems.length === 0) {
       educationContainer.innerHTML = '<p>No education added yet.</p>';
@@ -217,6 +206,8 @@ async function loadExperience() {
         educationContainer.appendChild(createTimelineItem(exp));
       });
     }
+
+    renderExpBook(experienceItems);
 
   } catch (error) {
     console.error('Error loading experience:', error);
@@ -244,6 +235,148 @@ function createTimelineItem(exp) {
     ${descriptionHTML}
   `;
   return item;
+}
+/* ============================================================
+   EXPERIENCE SLIDE CAROUSEL
+   ============================================================ */
+let expTotal = 0;
+let expCurrentIndex = 0;
+
+function createExpCard(exp) {
+  const startYear = new Date(exp.startDate).getFullYear();
+  const endYear = exp.currentlyActive
+    ? 'Present'
+    : (exp.endDate ? new Date(exp.endDate).getFullYear() : '');
+
+  let descHTML = '';
+  if (Array.isArray(exp.description) && exp.description.length > 0) {
+    descHTML = `<ul class="exp-card-desc-list">${exp.description.map(d => `<li>${d}</li>`).join('')}</ul>`;
+  }
+
+  const card = document.createElement('div');
+  card.classList.add('exp-card');
+  card.innerHTML = `
+    <span class="exp-card-badge">${startYear} - ${endYear}</span>
+    <h3 class="exp-card-title">${exp.title}</h3>
+    <h4 class="exp-card-org">${exp.organization}</h4>
+    ${descHTML}
+  `;
+  return card;
+}
+
+function renderExpBook(experiences) {
+  const track = document.getElementById('expTrack');
+  const dotsContainer = document.getElementById('expDots');
+  if (!track || !dotsContainer) return;
+
+  track.innerHTML = '';
+  dotsContainer.innerHTML = '';
+  expCurrentIndex = 0;
+  expTotal = experiences.length;
+
+  if (expTotal === 0) {
+    track.innerHTML = '<p style="color:#999; padding:20px;">No experience added yet.</p>';
+    updateExpCounter();
+    return;
+  }
+
+  experiences.forEach((exp, i) => {
+    track.appendChild(createExpCard(exp));
+
+    const dot = document.createElement('span');
+    dot.classList.add('exp-dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => goToExpIndex(i));
+    dotsContainer.appendChild(dot);
+  });
+
+  updateExpTrackPosition();
+  updateExpCounter();
+}
+
+function updateExpTrackPosition() {
+  const track = document.getElementById('expTrack');
+  if (track) {
+    track.style.transform = `translateX(-${expCurrentIndex * 100}%)`;
+  }
+}
+
+function updateExpCounter() {
+  const counterText = document.getElementById('expCounterText');
+  if (counterText) counterText.textContent = `${expTotal === 0 ? 0 : expCurrentIndex + 1} of ${expTotal}`;
+
+  document.querySelectorAll('.exp-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === expCurrentIndex);
+  });
+
+  const prevBtn = document.getElementById('expPrevBtn');
+  const nextBtn = document.getElementById('expNextBtn');
+  if (prevBtn) prevBtn.disabled = expCurrentIndex === 0;
+  if (nextBtn) nextBtn.disabled = expCurrentIndex >= expTotal - 1;
+}
+
+function goToExpIndex(targetIndex) {
+  if (targetIndex < 0 || targetIndex >= expTotal) return;
+  expCurrentIndex = targetIndex;
+  updateExpTrackPosition();
+  updateExpCounter();
+}
+
+document.getElementById('expNextBtn')?.addEventListener('click', () => goToExpIndex(expCurrentIndex + 1));
+document.getElementById('expPrevBtn')?.addEventListener('click', () => goToExpIndex(expCurrentIndex - 1));
+
+
+/* Drag to flip */
+function attachExpDragEvents() {
+  const scene = document.getElementById('expBookScene');
+  if (!scene) return;
+
+  let dragging = false;
+  let dragStartX = 0;
+  let activeCard = null;
+
+  function onDragStart(clientX) {
+    activeCard = expCards[expCurrentIndex];
+    if (!activeCard) return;
+    dragging = true;
+    dragStartX = clientX;
+    activeCard.style.transition = 'none';
+  }
+
+  function onDragMove(clientX) {
+    if (!dragging || !activeCard) return;
+    const delta = clientX - dragStartX;
+    const isFlipped = activeCard.classList.contains('flipped');
+    let rotation = isFlipped ? 180 : 0;
+    rotation += (delta / -3);
+    rotation = Math.max(0, Math.min(180, rotation));
+    activeCard.style.transform = `rotateY(-${rotation}deg)`;
+  }
+
+  function onDragEnd(clientX) {
+    if (!dragging || !activeCard) return;
+    dragging = false;
+    const delta = clientX - dragStartX;
+    activeCard.style.transition = 'transform 0.5s ease';
+
+    if (delta < -60 && expCurrentIndex < expCards.length - 1) {
+      flipNext();
+    } else if (delta > 60 && expCurrentIndex > 0) {
+      flipPrev();
+    } else {
+      const isFlipped = activeCard.classList.contains('flipped');
+      activeCard.style.transform = isFlipped ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+    }
+    activeCard = null;
+  }
+
+  scene.addEventListener('mousedown', (e) => onDragStart(e.clientX));
+  window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
+  window.addEventListener('mouseup', (e) => onDragEnd(e.clientX));
+
+  scene.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX));
+  scene.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX));
+  scene.addEventListener('touchend', (e) => onDragEnd(e.changedTouches[0].clientX));
 }
 
 /* Initial load */
@@ -378,3 +511,177 @@ if (copyEmailBtn) {
     }, 1500);
   });
 }
+
+/* Back to Top Button (footer) */
+const backToTopBtn = document.getElementById('backToTopBtn');
+if (backToTopBtn) {
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+/* ============================================================
+   FLOATING ACTION BUTTONS: Back to Top + Theme/Effects
+   ============================================================ */
+
+/* Back to Top FAB - show after scrolling */
+const fabBackToTop = document.getElementById('fabBackToTop');
+if (fabBackToTop) {
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      fabBackToTop.classList.remove('fab-hidden');
+    } else {
+      fabBackToTop.classList.add('fab-hidden');
+    }
+  });
+
+  fabBackToTop.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
+/* Effects menu open/close */
+const fabEffectsToggle = document.getElementById('fabEffectsToggle');
+const effectsMenu = document.getElementById('effectsMenu');
+const effectsOptions = document.querySelectorAll('.effects-option');
+
+if (fabEffectsToggle && effectsMenu) {
+  fabEffectsToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = effectsMenu.classList.toggle('open');
+    fabEffectsToggle.classList.toggle('menu-open');
+    fabEffectsToggle.setAttribute('aria-expanded', isOpen);
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!effectsMenu.contains(e.target) && e.target !== fabEffectsToggle) {
+      effectsMenu.classList.remove('open');
+      fabEffectsToggle.classList.remove('menu-open');
+      fabEffectsToggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+}
+
+/* Theme + Weather effect state */
+const weatherCanvas = document.getElementById('weatherCanvas');
+const ctx = weatherCanvas ? weatherCanvas.getContext('2d') : null;
+let particles = [];
+let weatherAnimId = null;
+let currentEffect = localStorage.getItem('siteEffect') || 'dark';
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+function resizeCanvas() {
+  if (!weatherCanvas) return;
+  weatherCanvas.width = window.innerWidth;
+  weatherCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
+
+function createParticles(type) {
+  particles = [];
+  const count = type === 'rain' ? 120 : 90;
+  for (let i = 0; i < count; i++) {
+    if (type === 'rain') {
+      particles.push({
+        x: Math.random() * weatherCanvas.width,
+        y: Math.random() * weatherCanvas.height,
+        length: Math.random() * 18 + 10,
+        speed: Math.random() * 6 + 8
+      });
+    } else {
+      particles.push({
+        x: Math.random() * weatherCanvas.width,
+        y: Math.random() * weatherCanvas.height,
+        radius: Math.random() * 3 + 1.5,
+        speed: Math.random() * 1.5 + 0.6,
+        drift: Math.random() * 1 - 0.5
+      });
+    }
+  }
+}
+
+function drawRain() {
+  ctx.clearRect(0, 0, weatherCanvas.width, weatherCanvas.height);
+  ctx.strokeStyle = 'rgba(174, 194, 224, 0.5)';
+  ctx.lineWidth = 1.2;
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.moveTo(p.x, p.y);
+    ctx.lineTo(p.x, p.y + p.length);
+    ctx.stroke();
+    p.y += p.speed;
+    if (p.y > weatherCanvas.height) {
+      p.y = -p.length;
+      p.x = Math.random() * weatherCanvas.width;
+    }
+  });
+  weatherAnimId = requestAnimationFrame(drawRain);
+}
+
+function drawSnow() {
+  ctx.clearRect(0, 0, weatherCanvas.width, weatherCanvas.height);
+  ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+    ctx.fill();
+    p.y += p.speed;
+    p.x += p.drift;
+    if (p.y > weatherCanvas.height) {
+      p.y = -5;
+      p.x = Math.random() * weatherCanvas.width;
+    }
+  });
+  weatherAnimId = requestAnimationFrame(drawSnow);
+}
+
+function stopWeather() {
+  if (weatherAnimId) cancelAnimationFrame(weatherAnimId);
+  weatherAnimId = null;
+  if (weatherCanvas) {
+    weatherCanvas.style.display = 'none';
+    if (ctx) ctx.clearRect(0, 0, weatherCanvas.width, weatherCanvas.height);
+  }
+}
+
+function applyEffect(effect) {
+  stopWeather();
+
+  if ((effect === 'rain' || effect === 'snow') && !prefersReducedMotion) {
+    weatherCanvas.style.display = 'block';
+    createParticles(effect);
+    effect === 'rain' ? drawRain() : drawSnow();
+  }
+
+  if (effect === 'light') {
+    document.body.classList.add('light-theme');
+    localStorage.setItem('siteTheme', 'light-theme');
+  } else {
+    document.body.classList.remove('light-theme');
+    localStorage.setItem('siteTheme', 'dark-theme');
+  }
+
+  effectsOptions.forEach(opt => {
+    const isActive = opt.getAttribute('data-effect') === effect;
+    opt.classList.toggle('active', isActive);
+    opt.setAttribute('aria-checked', isActive);
+  });
+
+  currentEffect = effect;
+  localStorage.setItem('siteEffect', effect);
+}
+
+effectsOptions.forEach(opt => {
+  opt.addEventListener('click', () => {
+    applyEffect(opt.getAttribute('data-effect'));
+    effectsMenu.classList.remove('open');
+    fabEffectsToggle.classList.remove('menu-open');
+    fabEffectsToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+/* Apply saved theme/effect on load */
+window.addEventListener('load', () => {
+  applyEffect(currentEffect);
+});
