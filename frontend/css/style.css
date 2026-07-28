@@ -499,7 +499,7 @@ body {
 }
 
 /* ============================================================
-   6. SKILLS SECTION (3D Cube)
+   6. SKILLS SECTION (3D Cube) — Professional refined version
    ============================================================ */
 .skills-section {
   padding: 80px 24px;
@@ -518,13 +518,15 @@ body {
 
 .skills-section h2 {
   font-size: 36px;
+  font-weight: 700;
   margin-bottom: 8px;
+  letter-spacing: -0.02em;
 }
 
 .skills-subtitle {
   color: #999;
   font-size: 14px;
-  margin-bottom: 30px;
+  margin-bottom: 36px;
 }
 
 .cube-tabs {
@@ -532,44 +534,75 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 50px;
+  margin-bottom: 46px;
 }
 
 .cube-tab {
-  background-color: #1c1c22;
-  border: 1px solid #333;
-  color: #ccc;
-  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #aaa;
+  padding: 10px 22px;
   border-radius: 30px;
   font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .cube-tab:hover {
-  border-color: var(--accent-purple);
+  border-color: rgba(192, 132, 252, 0.4);
+  color: #fff;
+  background-color: rgba(192, 132, 252, 0.06);
 }
 
 .cube-tab.active {
-  background-color: rgba(192, 132, 252, 0.15);
+  background-color: rgba(192, 132, 252, 0.14);
   color: var(--accent-purple);
   border-color: var(--accent-purple);
-  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.15);
+  box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.12);
 }
 
 .cube-action {
-  opacity: 0.75;
+  opacity: 0.7;
 }
 
+.cube-action:hover {
+  opacity: 1;
+}
+
+/* Cube-এর চারপাশে একটা elegant framed panel — subtle glow + radial vignette */
 .cube-scene {
+  position: relative;
   width: 100%;
   max-width: var(--site-max-width);
-  height: 500px;
+  height: 520px;
   margin: 0 auto;
   perspective: 1800px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 28px;
+  background:
+    radial-gradient(ellipse at 50% 30%, rgba(192, 132, 252, 0.06), transparent 60%),
+    radial-gradient(ellipse at 50% 100%, rgba(210, 229, 96, 0.04), transparent 60%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.015), rgba(255, 255, 255, 0));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 30px 60px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+/* একটু নিচে হালকা "floor glow" — cube কে যেন একটা platform-এ দাঁড়িয়ে আছে মনে হয় */
+.cube-scene::after {
+  content: '';
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 40px;
+  background: radial-gradient(ellipse, rgba(192, 132, 252, 0.18), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
 }
 
 .cube {
@@ -577,7 +610,7 @@ body {
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
-  transition: transform 0.6s ease;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
   cursor: grab;
 }
 
@@ -588,27 +621,27 @@ body {
 
 .cube-face {
   position: absolute;
-  width: 420px;
-  height: 420px;
+  width: 340px;
+  height: 340px;
   top: 50%;
   left: 50%;
-  margin-top: -210px;
-  margin-left: -210px;
-  background: linear-gradient(150deg, #26262e 0%, #17171c 100%);
-  border: 1px solid #3a3a45;
-  border-radius: 20px;
-  padding: 34px;
+  margin-top: -170px;
+  margin-left: -170px;
+  background: linear-gradient(150deg, #2a2a33 0%, #16161b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 30px;
   box-sizing: border-box;
   backface-visibility: hidden;
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
-.face-front  { transform: translateZ(210px); }
-.face-back   { transform: rotateY(180deg) translateZ(210px); }
-.face-right  { transform: rotateY(90deg) translateZ(210px); }
-.face-left   { transform: rotateY(-90deg) translateZ(210px); }
-.face-top    { transform: rotateX(90deg) translateZ(210px); }
-.face-bottom { transform: rotateX(-90deg) translateZ(210px); }
+.face-front  { transform: translateZ(170px); }
+.face-back   { transform: rotateY(180deg) translateZ(170px); }
+.face-right  { transform: rotateY(90deg) translateZ(170px); }
+.face-left   { transform: rotateY(-90deg) translateZ(170px); }
+.face-top    { transform: rotateX(90deg) translateZ(170px); }
+.face-bottom { transform: rotateX(-90deg) translateZ(170px); }
 
 .face-header {
   display: flex;
@@ -616,44 +649,59 @@ body {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 10px;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .cube-face h3 {
-  font-size: 22px;
+  font-size: 20px;
+  font-weight: 700;
   color: var(--text-light);
+  letter-spacing: -0.01em;
 }
 
 .face-badge {
-  background-color: rgba(192, 132, 252, 0.12);
+  background-color: rgba(192, 132, 252, 0.1);
   color: var(--accent-purple);
-  font-size: 11px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
   padding: 5px 12px;
   border-radius: 20px;
-  border: 1px solid rgba(192, 132, 252, 0.3);
+  border: 1px solid rgba(192, 132, 252, 0.25);
   white-space: nowrap;
 }
 
 .cube-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 8px;
 }
 
 .cube-pills span {
-  background-color: #2a2a33;
-  color: #ddd;
-  padding: 10px 16px;
+  background-color: rgba(255, 255, 255, 0.04);
+  color: #e0e0e0;
+  padding: 9px 15px;
   border-radius: 10px;
-  font-size: 14px;
-  border: 1px solid #3a3a45;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+
+.cube-pills span:hover {
+  background-color: rgba(192, 132, 252, 0.1);
+  border-color: rgba(192, 132, 252, 0.3);
+  color: #fff;
 }
 
 .cube-hint {
   text-align: center;
-  color: #777;
-  font-size: 13px;
-  margin-top: 30px;
+  color: #666;
+  font-size: 12.5px;
+  margin-top: 28px;
+  letter-spacing: 0.01em;
 }
 
 /* ============================================================
@@ -1081,6 +1129,13 @@ body {
   background-clip: text;
   color: transparent;
   margin-bottom: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.footer-brand:hover {
+  opacity: 0.85;
 }
 
 .footer-tagline {
@@ -1661,7 +1716,7 @@ body.light-theme .back-to-top-btn {
   transform: rotate(180deg);
 }
 
-/* ৬. ডেসক্রিপশন এবং বুলেট পয়েন্ট */
+/* ৬. ডেসক্রিপশন এবং বুলেট পয়েন্ট */
 .exp-accordion-body {
   max-height: 0;
   overflow: hidden;
