@@ -1527,3 +1527,168 @@ body.light-theme .back-to-top-btn {
   color: #121212;
   border-color: #e2e2e2;
 }
+
+/* ============================================================
+   EXPERIENCE SECTION (FULL WIDTH & COLOR MATCHED)
+   ============================================================ */
+
+/* সেকশন এবং কনটেইনারের উইডথ পজিশনিং */
+.experience-section {
+  width: 100%;
+  padding: 60px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.exp-container {
+  width: 100%;
+  max-width: 1200px; /* Projects সেকশনের সাথে নিখুঁতভাবে মেলানোর জন্য */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.exp-container .section-title {
+  text-align: left;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 24px;
+}
+
+.exp-accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+/* ১. কার্ড স্টাইল (Projects-এর মতো ডার্ক চারকোল) */
+.exp-accordion-card {
+  background-color: #25252b;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+/* ২. হোভার ও অ্যাক্টিভ স্টেট */
+.exp-accordion-card:hover,
+.exp-accordion-card.active {
+  border-color: rgba(168, 85, 247, 0.4); /* পার্পল অ্যাক্সেন্ট গ্লো */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.exp-accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  cursor: pointer;
+}
+
+/* ৩. টাইটেল এবং ডেট টেক্সট */
+.exp-header-info h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 6px 0;
+}
+
+.exp-header-info .exp-date {
+  font-size: 0.85rem;
+  color: #a1a1aa;
+  margin: 0;
+}
+
+.exp-accordion-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ৪. Details / Hide ব্যাজ */
+.exp-toggle-text {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #d8b4fe;
+  background: rgba(168, 85, 247, 0.12);
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  transition: all 0.2s ease;
+}
+
+/* ৫. এরো (Arrow) বাটন */
+.exp-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #e2e8f0;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* হোভার এফেক্ট (Live Demo বাটনের মতো লাইম-গ্রিন) */
+.exp-accordion-card:hover .exp-toggle-text {
+  background: rgba(168, 85, 247, 0.25);
+  color: #ffffff;
+}
+
+.exp-accordion-card:hover .exp-toggle-btn {
+  background: #d9f99d;
+  color: #0f172a;
+  border-color: #d9f99d;
+}
+
+.exp-arrow-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.3s ease;
+  fill: currentColor;
+}
+
+.exp-accordion-card.active .exp-arrow-icon {
+  transform: rotate(180deg);
+}
+
+/* ৬. ডেসক্রিপশন এবং বুলেট পয়েন্ট */
+.exp-accordion-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease-out, padding 0.35s ease;
+  padding: 0 24px;
+  border-top: 1px solid transparent;
+}
+
+.exp-accordion-card.active .exp-accordion-body {
+  max-height: 500px;
+  padding: 16px 24px 24px 24px;
+  border-top-color: rgba(255, 255, 255, 0.06);
+}
+
+.exp-desc-list {
+  margin: 0;
+  padding-left: 20px;
+  color: #cbd5e1;
+}
+
+.exp-desc-list li {
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+.exp-desc-list li:last-child {
+  margin-bottom: 0;
+}
+
+.exp-desc-list li::marker {
+  color: #d9f99d; /* লাইম-গ্রিন বুলেট */
+}

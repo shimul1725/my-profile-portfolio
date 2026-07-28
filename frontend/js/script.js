@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://my-profile-portfolio.onrender.com/api';
-//const API_BASE_URL = 'http://localhost:5000/api';
+// const API_BASE_URL = 'http://localhost:5000/api';
 
 /* ============================================================
    SKILLS 3D CUBE
@@ -13,21 +13,29 @@ async function loadSkills() {
 
     categories.forEach(cat => {
       const container = document.getElementById(`face-${cat}`);
-      const items = skills.filter(s => s.category === cat);
-      container.innerHTML = items.length
-        ? items.map(s => `<span>${s.name}</span>`).join('')
-        : '<span>No skills yet</span>';
+      if (container) {
+        const items = skills.filter(s => s.category === cat);
+        container.innerHTML = items.length
+          ? items.map(s => `<span>${s.name}</span>`).join('')
+          : '<span>No skills yet</span>';
+      }
     });
 
     const bottomContainer = document.getElementById('face-bottom-summary');
-    bottomContainer.innerHTML = skills.map(s => `<span>${s.name}</span>`).join('');
+    if (bottomContainer) {
+      // Unique skill list for bottom summary
+      const uniqueSkills = Array.from(new Set(skills.map(s => s.name)));
+      bottomContainer.innerHTML = uniqueSkills.length
+        ? uniqueSkills.map(name => `<span>${name}</span>`).join('')
+        : '<span>No skills yet</span>';
+    }
 
   } catch (error) {
     console.error('Error loading skills:', error);
   }
 }
 
-/* Cube rotation state — সবসময় একটা হালকা isometric tilt রাখা হয় */
+/* Cube rotation state — সবসময় একটা হালকা isometric tilt রাখা হয় */
 const cube = document.getElementById('skillsCube');
 const BASE_TILT = { x: -12, y: -25 };
 let rotX = BASE_TILT.x;
@@ -35,7 +43,9 @@ let rotY = BASE_TILT.y;
 let autoRotateInterval = null;
 
 function applyCubeRotation() {
-  cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  if (cube) {
+    cube.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+  }
 }
 
 const faceRotations = {
@@ -49,33 +59,37 @@ const faceRotations = {
 
 /* Tab click → rotate to that face */
 const cubeTabs = document.querySelectorAll('.cube-tab[data-face]');
+const autoRotateBtn = document.getElementById('cubeAutoRotate');
+
 cubeTabs.forEach(tab => {
   tab.addEventListener('click', () => {
     stopAutoRotate();
-    autoRotateBtn.textContent = 'Auto Rotate';
     const face = tab.getAttribute('data-face');
-    rotX = faceRotations[face].x;
-    rotY = faceRotations[face].y;
-    applyCubeRotation();
+    if (faceRotations[face]) {
+      rotX = faceRotations[face].x;
+      rotY = faceRotations[face].y;
+      applyCubeRotation();
 
-    cubeTabs.forEach(t => t.classList.remove('active'));
-    tab.classList.add('active');
+      cubeTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    }
   });
 });
 
 /* Reset button */
-document.getElementById('cubeReset').addEventListener('click', () => {
+document.getElementById('cubeReset')?.addEventListener('click', () => {
   stopAutoRotate();
-  autoRotateBtn.textContent = 'Auto Rotate';
   rotX = BASE_TILT.x;
   rotY = BASE_TILT.y;
   applyCubeRotation();
   cubeTabs.forEach(t => t.classList.remove('active'));
-  cubeTabs[0].classList.add('active');
+  if (cubeTabs[0]) cubeTabs[0].classList.add('active');
 });
 
-/* Auto rotate toggle (with button text change) */
+/* Auto rotate toggle */
 function startAutoRotate() {
+  stopAutoRotate();
+  if (autoRotateBtn) autoRotateBtn.textContent = 'Pause Rotation';
   autoRotateInterval = setInterval(() => {
     rotY += 1;
     applyCubeRotation();
@@ -87,18 +101,18 @@ function stopAutoRotate() {
     clearInterval(autoRotateInterval);
     autoRotateInterval = null;
   }
+  if (autoRotateBtn) autoRotateBtn.textContent = 'Auto Rotate';
 }
 
-const autoRotateBtn = document.getElementById('cubeAutoRotate');
-autoRotateBtn.addEventListener('click', () => {
-  if (autoRotateInterval) {
-    stopAutoRotate();
-    autoRotateBtn.textContent = 'Auto Rotate';
-  } else {
-    startAutoRotate();
-    autoRotateBtn.textContent = 'Pause Rotation';
-  }
-});
+if (autoRotateBtn) {
+  autoRotateBtn.addEventListener('click', () => {
+    if (autoRotateInterval) {
+      stopAutoRotate();
+    } else {
+      startAutoRotate();
+    }
+  });
+}
 
 /* Drag to rotate */
 let isDragging = false;
@@ -109,13 +123,12 @@ let startRotY = 0;
 
 function dragStart(clientX, clientY) {
   stopAutoRotate();
-  autoRotateBtn.textContent = 'Auto Rotate';
   isDragging = true;
   startX = clientX;
   startY = clientY;
   startRotX = rotX;
   startRotY = rotY;
-  cube.classList.add('dragging');
+  cube?.classList.add('dragging');
 }
 
 function dragMove(clientX, clientY) {
@@ -129,33 +142,41 @@ function dragMove(clientX, clientY) {
 
 function dragEnd() {
   isDragging = false;
-  cube.classList.remove('dragging');
+  cube?.classList.remove('dragging');
 }
 
-cube.addEventListener('mousedown', (e) => dragStart(e.clientX, e.clientY));
-window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
-window.addEventListener('mouseup', dragEnd);
+if (cube) {
+  cube.addEventListener('mousedown', (e) => dragStart(e.clientX, e.clientY));
+  window.addEventListener('mousemove', (e) => dragMove(e.clientX, e.clientY));
+  window.addEventListener('mouseup', dragEnd);
 
-cube.addEventListener('touchstart', (e) => {
-  const touch = e.touches[0];
-  dragStart(touch.clientX, touch.clientY);
-});
-window.addEventListener('touchmove', (e) => {
-  const touch = e.touches[0];
-  dragMove(touch.clientX, touch.clientY);
-});
-window.addEventListener('touchend', dragEnd);
+  cube.addEventListener('touchstart', (e) => {
+    const touch = e.touches[0];
+    dragStart(touch.clientX, touch.clientY);
+  });
+  window.addEventListener('touchmove', (e) => {
+    if (isDragging) {
+      const touch = e.touches[0];
+      dragMove(touch.clientX, touch.clientY);
+    }
+  });
+  window.addEventListener('touchend', dragEnd);
+}
 
-/*Project*/
+/* ============================================================
+   PROJECTS
+   ============================================================ */
 async function loadProjects() {
   try {
     const response = await fetch(`${API_BASE_URL}/projects`);
     const projects = await response.json();
 
     const container = document.getElementById('projectsContainer');
+    if (!container) return;
+
     container.innerHTML = '';
 
-    if (projects.length === 0) {
+    if (!projects || projects.length === 0) {
       container.innerHTML = '<p>No projects added yet.</p>';
       return;
     }
@@ -164,7 +185,9 @@ async function loadProjects() {
       const projectCard = document.createElement('div');
       projectCard.classList.add('project-card');
 
-      const techList = project.techStack.map(tech => `<span class="tech-badge">${tech}</span>`).join('');
+      const techList = Array.isArray(project.techStack)
+        ? project.techStack.map(tech => `<span class="tech-badge">${tech}</span>`).join('')
+        : '';
 
       projectCard.innerHTML = `
         <div class="project-thumbnail">
@@ -175,8 +198,8 @@ async function loadProjects() {
           <p>${project.description}</p>
           <div class="tech-stack">${techList}</div>
           <div class="project-links">
-            ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" class="btn btn-primary">Live Demo</a>` : ''}
-            ${project.githubLink ? `<a href="${project.githubLink}" target="_blank" class="btn btn-secondary">GitHub</a>` : ''}
+            ${project.liveLink ? `<a href="${project.liveLink}" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Live Demo</a>` : ''}
+            ${project.githubLink ? `<a href="${project.githubLink}" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">GitHub</a>` : ''}
           </div>
         </div>
       `;
@@ -187,26 +210,29 @@ async function loadProjects() {
   }
 }
 
-/*Experience*/
+/* ============================================================
+   EXPERIENCE & EDUCATION
+   ============================================================ */
 async function loadExperience() {
   try {
     const response = await fetch(`${API_BASE_URL}/experience`);
     const experiences = await response.json();
 
     const educationContainer = document.getElementById('educationContainer');
-    educationContainer.innerHTML = '';
+    if (educationContainer) {
+      educationContainer.innerHTML = '';
+      const educationItems = experiences.filter(exp => exp.type === 'Education');
 
-    const experienceItems = experiences.filter(exp => exp.type === 'Experience');
-    const educationItems = experiences.filter(exp => exp.type === 'Education');
-
-    if (educationItems.length === 0) {
-      educationContainer.innerHTML = '<p>No education added yet.</p>';
-    } else {
-      educationItems.forEach(exp => {
-        educationContainer.appendChild(createTimelineItem(exp));
-      });
+      if (educationItems.length === 0) {
+        educationContainer.innerHTML = '<p>No education added yet.</p>';
+      } else {
+        educationItems.forEach(exp => {
+          educationContainer.appendChild(createTimelineItem(exp));
+        });
+      }
     }
 
+    const experienceItems = experiences.filter(exp => exp.type === 'Experience');
     renderExpBook(experienceItems);
 
   } catch (error) {
@@ -215,7 +241,7 @@ async function loadExperience() {
 }
 
 function createTimelineItem(exp) {
-  const startYear = new Date(exp.startDate).getFullYear();
+  const startYear = exp.startDate ? new Date(exp.startDate).getFullYear() : '';
   const endYear = exp.currentlyActive
     ? 'Present'
     : (exp.endDate ? new Date(exp.endDate).getFullYear() : '');
@@ -231,222 +257,139 @@ function createTimelineItem(exp) {
   item.innerHTML = `
     <h3>${exp.title}</h3>
     <h4>${exp.organization}</h4>
-    <p class="timeline-date">${startYear} - ${endYear}</p>
+    <p class="timeline-date">${startYear} ${endYear ? '- ' + endYear : ''}</p>
     ${descriptionHTML}
   `;
   return item;
 }
+
 /* ============================================================
-   EXPERIENCE SLIDE CAROUSEL
+   EXPERIENCE (ACCORDION STYLE)
    ============================================================ */
-let expTotal = 0;
-let expCurrentIndex = 0;
+async function loadExperience() {
+  try {
+    const response = await fetch(`${API_BASE_URL}/experience`);
+    const experiences = await response.json();
 
-function createExpCard(exp) {
-  const startYear = new Date(exp.startDate).getFullYear();
-  const endYear = exp.currentlyActive
-    ? 'Present'
-    : (exp.endDate ? new Date(exp.endDate).getFullYear() : '');
+    // 1. Render Education Timeline
+    const educationContainer = document.getElementById('educationContainer');
+    if (educationContainer) {
+      educationContainer.innerHTML = '';
+      const educationItems = experiences.filter(exp => exp.type === 'Education');
 
-  let descHTML = '';
-  if (Array.isArray(exp.description) && exp.description.length > 0) {
-    descHTML = `<ul class="exp-card-desc-list">${exp.description.map(d => `<li>${d}</li>`).join('')}</ul>`;
+      if (educationItems.length === 0) {
+        educationContainer.innerHTML = '<p>No education added yet.</p>';
+      } else {
+        educationItems.forEach(exp => {
+          educationContainer.appendChild(createTimelineItem(exp));
+        });
+      }
+    }
+
+    // 2. Render Experience Accordion
+    const experienceItems = experiences.filter(exp => exp.type === 'Experience');
+    renderExpAccordion(experienceItems);
+
+  } catch (error) {
+    console.error('Error loading experience:', error);
   }
-
-  const card = document.createElement('div');
-  card.classList.add('exp-card');
-  card.innerHTML = `
-    <span class="exp-card-badge">${startYear} - ${endYear}</span>
-    <h3 class="exp-card-title">${exp.title}</h3>
-    <h4 class="exp-card-org">${exp.organization}</h4>
-    ${descHTML}
-  `;
-  return card;
 }
 
-function renderExpBook(experiences) {
-  const track = document.getElementById('expTrack');
-  const dotsContainer = document.getElementById('expDots');
-  if (!track || !dotsContainer) return;
+function renderExpAccordion(experiences) {
+  const container = document.getElementById('experienceContainer') || document.getElementById('expTrack');
+  if (!container) return;
 
-  track.innerHTML = '';
-  dotsContainer.innerHTML = '';
-  expCurrentIndex = 0;
-  expTotal = experiences.length;
+  container.innerHTML = '';
 
-  if (expTotal === 0) {
-    track.innerHTML = '<p style="color:#999; padding:20px;">No experience added yet.</p>';
-    updateExpCounter();
+  if (!experiences || experiences.length === 0) {
+    container.innerHTML = '<p style="color:#999; padding:20px;">No experience added yet.</p>';
     return;
   }
 
-  experiences.forEach((exp, i) => {
-    track.appendChild(createExpCard(exp));
+  experiences.forEach((exp, index) => {
+    const startYear = exp.startDate ? formatDate(exp.startDate) : '';
+    const endYear = exp.currentlyActive
+      ? 'Present'
+      : (exp.endDate ? formatDate(exp.endDate) : '');
 
-    const dot = document.createElement('span');
-    dot.classList.add('exp-dot');
-    if (i === 0) dot.classList.add('active');
-    dot.addEventListener('click', () => goToExpIndex(i));
-    dotsContainer.appendChild(dot);
-  });
+    const dateRange = `${startYear} to ${endYear}`;
 
-  updateExpTrackPosition();
-  updateExpCounter();
-}
-
-function updateExpTrackPosition() {
-  const track = document.getElementById('expTrack');
-  if (track) {
-    track.style.transform = `translateX(-${expCurrentIndex * 100}%)`;
-  }
-}
-
-function updateExpCounter() {
-  const counterText = document.getElementById('expCounterText');
-  if (counterText) counterText.textContent = `${expTotal === 0 ? 0 : expCurrentIndex + 1} of ${expTotal}`;
-
-  document.querySelectorAll('.exp-dot').forEach((d, i) => {
-    d.classList.toggle('active', i === expCurrentIndex);
-  });
-
-  const prevBtn = document.getElementById('expPrevBtn');
-  const nextBtn = document.getElementById('expNextBtn');
-  if (prevBtn) prevBtn.disabled = expCurrentIndex === 0;
-  if (nextBtn) nextBtn.disabled = expCurrentIndex >= expTotal - 1;
-}
-
-function goToExpIndex(targetIndex) {
-  if (targetIndex < 0 || targetIndex >= expTotal) return;
-  expCurrentIndex = targetIndex;
-  updateExpTrackPosition();
-  updateExpCounter();
-}
-
-document.getElementById('expNextBtn')?.addEventListener('click', () => goToExpIndex(expCurrentIndex + 1));
-document.getElementById('expPrevBtn')?.addEventListener('click', () => goToExpIndex(expCurrentIndex - 1));
-
-
-/* Drag to flip */
-function attachExpDragEvents() {
-  const scene = document.getElementById('expBookScene');
-  if (!scene) return;
-
-  let dragging = false;
-  let dragStartX = 0;
-  let activeCard = null;
-
-  function onDragStart(clientX) {
-    activeCard = expCards[expCurrentIndex];
-    if (!activeCard) return;
-    dragging = true;
-    dragStartX = clientX;
-    activeCard.style.transition = 'none';
-  }
-
-  function onDragMove(clientX) {
-    if (!dragging || !activeCard) return;
-    const delta = clientX - dragStartX;
-    const isFlipped = activeCard.classList.contains('flipped');
-    let rotation = isFlipped ? 180 : 0;
-    rotation += (delta / -3);
-    rotation = Math.max(0, Math.min(180, rotation));
-    activeCard.style.transform = `rotateY(-${rotation}deg)`;
-  }
-
-  function onDragEnd(clientX) {
-    if (!dragging || !activeCard) return;
-    dragging = false;
-    const delta = clientX - dragStartX;
-    activeCard.style.transition = 'transform 0.5s ease';
-
-    if (delta < -60 && expCurrentIndex < expCards.length - 1) {
-      flipNext();
-    } else if (delta > 60 && expCurrentIndex > 0) {
-      flipPrev();
-    } else {
-      const isFlipped = activeCard.classList.contains('flipped');
-      activeCard.style.transform = isFlipped ? 'rotateY(-180deg)' : 'rotateY(0deg)';
+    let descHTML = '';
+    if (Array.isArray(exp.description) && exp.description.length > 0) {
+      descHTML = `<ul class="exp-desc-list">${exp.description.map(d => `<li>${d}</li>`).join('')}</ul>`;
     }
-    activeCard = null;
-  }
 
-  scene.addEventListener('mousedown', (e) => onDragStart(e.clientX));
-  window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
-  window.addEventListener('mouseup', (e) => onDragEnd(e.clientX));
-
-  scene.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX));
-  scene.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX));
-  scene.addEventListener('touchend', (e) => onDragEnd(e.changedTouches[0].clientX));
-}
-
-/* Initial load */
-loadSkills();
-loadProjects();
-loadExperience();
-applyCubeRotation();
-
-/*Scroll Listener for transparent navbar (kept for future use if needed)*/
-window.addEventListener('scroll', () => {
-  const navbar = document.querySelector('.navbar-header');
-  if (navbar) {
-    if (window.scrollY > 50) {
-      navbar.classList.add('scrolled');
-    } else {
-      navbar.classList.remove('scrolled');
+    const card = document.createElement('div');
+    card.classList.add('exp-accordion-card');
+    
+    // প্রথম কার্ডটি বাই-ডিফল্ট ওপেন থাকবে (আপনার স্ক্রিনশটের মতো)
+    if (index === 0) {
+      card.classList.add('active');
     }
-  }
-});
 
-/*contactForm*/
-const contactForm = document.getElementById('contactForm');
+    card.innerHTML = `
+      <div class="exp-accordion-header">
+        <div class="exp-header-info">
+          <h3>${exp.title} | ${exp.organization}</h3>
+          <p class="exp-date">${dateRange}</p>
+        </div>
+        <div class="exp-accordion-controls">
+          <span class="exp-toggle-text">${index === 0 ? 'Hide' : 'Details'}</span>
+          <button class="exp-toggle-btn" aria-label="Toggle details">
+            <svg class="exp-arrow-icon" viewBox="0 0 24 24">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="exp-accordion-body">
+        ${descHTML}
+      </div>
+    `;
 
-if (contactForm) {
-  contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+    // Click event handler for Expand/Collapse
+    const header = card.querySelector('.exp-accordion-header');
+    header.addEventListener('click', () => {
+      const isActive = card.classList.contains('active');
+      
+      // অপশনাল: একটি কার্ড ওপেন করলে বাকিগুলো বন্ধ করতে চাইলে নিচের লাইনটি আনকমেন্ট করুন
+      // document.querySelectorAll('.exp-accordion-card').forEach(c => c.classList.remove('active'));
 
-    const name = document.getElementById('contactName').value;
-    const email = document.getElementById('contactEmail').value;
-    const message = document.getElementById('contactMessage').value;
-    const statusEl = document.getElementById('contactStatus');
-
-    statusEl.textContent = 'Sending...';
-    statusEl.style.color = '#ccc';
-
-    try {
-      const response = await fetch(`${API_BASE_URL}/contact`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, message })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message);
+      if (isActive) {
+        card.classList.remove('active');
+        card.querySelector('.exp-toggle-text').textContent = 'Details';
+      } else {
+        card.classList.add('active');
+        card.querySelector('.exp-toggle-text').textContent = 'Hide';
       }
+    });
 
-      statusEl.textContent = 'Message sent successfully! I\'ll get back to you soon.';
-      statusEl.style.color = 'var(--accent-olive)';
-      contactForm.reset();
-
-    } catch (error) {
-      statusEl.textContent = 'Something went wrong. Please try again.';
-      statusEl.style.color = '#e5484d';
-      console.error(error);
-    }
+    container.appendChild(card);
   });
 }
 
-/*testimonials*/
+// তারিখ ফরম্যাট করার ছোট হেলপার (e.g., Sep 2025)
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  if (isNaN(date.getTime())) return dateStr; // যদি স্ট্রিং ফরম্যাটে ইয়ার থাকে
+  return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+}
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
 async function loadTestimonials() {
   try {
     const response = await fetch(`${API_BASE_URL}/testimonials`);
     const testimonials = await response.json();
 
     const container = document.getElementById('testimonialsContainer');
+    if (!container) return;
+
     container.innerHTML = '';
 
-    if (testimonials.length === 0) {
+    if (!testimonials || testimonials.length === 0) {
       container.innerHTML = '<p>No testimonials yet.</p>';
       return;
     }
@@ -467,7 +410,58 @@ async function loadTestimonials() {
     console.error('Error loading testimonials:', error);
   }
 }
-loadTestimonials();
+
+/* ============================================================
+   CONTACT FORM
+   ============================================================ */
+const contactForm = document.getElementById('contactForm');
+
+if (contactForm) {
+  contactForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const message = document.getElementById('contactMessage').value;
+    const statusEl = document.getElementById('contactStatus');
+
+    if (statusEl) {
+      statusEl.textContent = 'Sending...';
+      statusEl.style.color = '#ccc';
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, message })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Error sending message');
+      }
+
+      if (statusEl) {
+        statusEl.textContent = "Message sent successfully! I'll get back to you soon.";
+        statusEl.style.color = 'var(--accent-olive)';
+      }
+      contactForm.reset();
+
+    } catch (error) {
+      if (statusEl) {
+        statusEl.textContent = 'Something went wrong. Please try again.';
+        statusEl.style.color = '#e5484d';
+      }
+      console.error(error);
+    }
+  });
+}
+
+/* ============================================================
+   UI INTERACTIONS & WEATHER CANVAS
+   ============================================================ */
 
 /* Active Navbar Link on Scroll (Scrollspy) */
 const sections = document.querySelectorAll('section[id]');
@@ -512,20 +506,13 @@ if (copyEmailBtn) {
   });
 }
 
-/* Back to Top Button (footer) */
-const backToTopBtn = document.getElementById('backToTopBtn');
-if (backToTopBtn) {
-  backToTopBtn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-}
-
-/* ============================================================
-   FLOATING ACTION BUTTONS: Back to Top + Theme/Effects
-   ============================================================ */
-
-/* Back to Top FAB - show after scrolling */
+/* Back to Top Floating Action Button */
 const fabBackToTop = document.getElementById('fabBackToTop');
+const backToTopBtn = document.getElementById('backToTopBtn');
+
+const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+if (backToTopBtn) backToTopBtn.addEventListener('click', scrollToTop);
 if (fabBackToTop) {
   window.addEventListener('scroll', () => {
     if (window.scrollY > 400) {
@@ -534,13 +521,10 @@ if (fabBackToTop) {
       fabBackToTop.classList.add('fab-hidden');
     }
   });
-
-  fabBackToTop.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
+  fabBackToTop.addEventListener('click', scrollToTop);
 }
 
-/* Effects menu open/close */
+/* Effects Menu Toggle */
 const fabEffectsToggle = document.getElementById('fabEffectsToggle');
 const effectsMenu = document.getElementById('effectsMenu');
 const effectsOptions = document.querySelectorAll('.effects-option');
@@ -562,7 +546,7 @@ if (fabEffectsToggle && effectsMenu) {
   });
 }
 
-/* Theme + Weather effect state */
+/* Theme + Weather Effect Canvas Engine */
 const weatherCanvas = document.getElementById('weatherCanvas');
 const ctx = weatherCanvas ? weatherCanvas.getContext('2d') : null;
 let particles = [];
@@ -576,10 +560,10 @@ function resizeCanvas() {
   weatherCanvas.height = window.innerHeight;
 }
 window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
 
 function createParticles(type) {
   particles = [];
+  if (!weatherCanvas) return;
   const count = type === 'rain' ? 120 : 90;
   for (let i = 0; i < count; i++) {
     if (type === 'rain') {
@@ -602,6 +586,7 @@ function createParticles(type) {
 }
 
 function drawRain() {
+  if (!ctx || !weatherCanvas) return;
   ctx.clearRect(0, 0, weatherCanvas.width, weatherCanvas.height);
   ctx.strokeStyle = 'rgba(174, 194, 224, 0.5)';
   ctx.lineWidth = 1.2;
@@ -620,6 +605,7 @@ function drawRain() {
 }
 
 function drawSnow() {
+  if (!ctx || !weatherCanvas) return;
   ctx.clearRect(0, 0, weatherCanvas.width, weatherCanvas.height);
   ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
   particles.forEach(p => {
@@ -648,7 +634,7 @@ function stopWeather() {
 function applyEffect(effect) {
   stopWeather();
 
-  if ((effect === 'rain' || effect === 'snow') && !prefersReducedMotion) {
+  if ((effect === 'rain' || effect === 'snow') && !prefersReducedMotion && weatherCanvas) {
     weatherCanvas.style.display = 'block';
     createParticles(effect);
     effect === 'rain' ? drawRain() : drawSnow();
@@ -675,13 +661,19 @@ function applyEffect(effect) {
 effectsOptions.forEach(opt => {
   opt.addEventListener('click', () => {
     applyEffect(opt.getAttribute('data-effect'));
-    effectsMenu.classList.remove('open');
-    fabEffectsToggle.classList.remove('menu-open');
-    fabEffectsToggle.setAttribute('aria-expanded', 'false');
+    effectsMenu?.classList.remove('open');
+    fabEffectsToggle?.classList.remove('menu-open');
+    fabEffectsToggle?.setAttribute('aria-expanded', 'false');
   });
 });
 
-/* Apply saved theme/effect on load */
-window.addEventListener('load', () => {
+/* INITIAL SETUP ON PAGE LOAD */
+document.addEventListener('DOMContentLoaded', () => {
+  resizeCanvas();
+  loadSkills();
+  loadProjects();
+  loadExperience();
+  loadTestimonials();
+  applyCubeRotation();
   applyEffect(currentEffect);
 });
