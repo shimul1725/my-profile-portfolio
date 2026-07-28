@@ -78,8 +78,11 @@ body {
 
 .brand-name {
   font-size: 18px;
-  font-weight: 600;
-  color: var(--text-light);
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--accent-purple), #7dd3fc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
 
 .nav-links {
