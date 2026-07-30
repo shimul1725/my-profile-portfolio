@@ -5,7 +5,7 @@ A full-stack, dynamic developer portfolio built from scratch with a custom Node.
 **Live Site:** [my-profile-portfolio.vercel.app](https://my-profile-portfolio-ashen.vercel.app/#) <!-- update with real link -->
 ---
 
-![Portfolio Banner](docs/readme-banner.svg)
+![Portfolio Banner](docs/readme-banner.png)
 
 ## ✨ Features
 
