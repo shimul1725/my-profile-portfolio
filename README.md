@@ -3,7 +3,6 @@
 A full-stack, dynamic developer portfolio built from scratch with a custom Node.js/Express backend, MongoDB Atlas database, and two separate frontends — a public-facing vanilla JS site and a React-based admin dashboard for content management.
 
 **Live Site:** [my-profile-portfolio.vercel.app](https://my-profile-portfolio.vercel.app) <!-- update with real link -->
-
 ---
 
 ## ✨ Features
